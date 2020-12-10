@@ -8,7 +8,7 @@ from sentry.models import (
     OrganizationMember,
     UserOption,
 )
-
+import logging
 
 def _get_effective_sentry_role(group_names):
     role_priority_order = [
@@ -35,7 +35,11 @@ def _get_effective_sentry_role(group_names):
 
 class SentryLdapBackend(LDAPBackend):
     def get_or_create_user(self, username, ldap_user):
+        logger = logging.getLogger('django_auth_ldap')
         username_field = getattr(settings, 'AUTH_LDAP_SENTRY_USERNAME_FIELD', '')
+        logger.info("username_field")
+        logger.info(username_field)
+        logger.info(ldap_user.attrs)
         if username_field:
             # pull the username out of the ldap_user info
             if ldap_user and username_field in ldap_user.attrs:
