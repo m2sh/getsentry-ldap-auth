@@ -36,26 +36,22 @@ def _get_effective_sentry_role(group_names):
 
 class SentryLdapBackend(LDAPBackend):
     def get_or_create_user(self, username, ldap_user):
-        logger = logging.getLogger('django_auth_ldap')
         username_field = getattr(settings, 'AUTH_LDAP_SENTRY_USERNAME_FIELD', '')
-        logger.info("username_field")
-        logger.info(username_field)
-        logger.info(ldap_user.attrs)
         print("====== Login ======")
         pprint(ldap_user.attrs._data)
         print('---------')
-        pprint(ldap_user.attrs._keys)
-        print('---------')
-        print(username_field)
-        print("===================")
         if username_field:
             # pull the username out of the ldap_user info
             if ldap_user and username_field in ldap_user.attrs:
                 username = ldap_user.attrs[username_field]
                 if isinstance(username, (list, tuple)):
                     username = username[0]
-
+        print('---- The username -----')
+        print(username)
         model = super(SentryLdapBackend, self).get_or_create_user(username, ldap_user)
+        print("======Model=======")
+        pprint(model)
+        print('------------------')
         if len(model) < 1:
             return model
 
