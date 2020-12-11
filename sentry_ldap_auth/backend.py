@@ -9,6 +9,7 @@ from sentry.models import (
     UserOption,
 )
 import logging
+from pprint import pprint
 
 def _get_effective_sentry_role(group_names):
     role_priority_order = [
@@ -40,6 +41,12 @@ class SentryLdapBackend(LDAPBackend):
         logger.info("username_field")
         logger.info(username_field)
         logger.info(ldap_user.attrs)
+        print("====== Login ======")
+        pprint(ldap_user.attrs._data)
+        print('---------')
+        pprint(ldap_user.attrs._keys)
+        print(username_field)
+        print("===================")
         if username_field:
             # pull the username out of the ldap_user info
             if ldap_user and username_field in ldap_user.attrs:
